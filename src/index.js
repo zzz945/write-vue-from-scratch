@@ -1,10 +1,14 @@
+import Watcher from './observer/watcher.js'
+import { observe } from "./observer/index.js"
+
 export default function Vue (options) {
   var vm = this
   vm.$options = options
-  initState(vm)
+  initDataProxy(vm)
+  initWatcher(vm)
 }
 
-function initState (vm) {
+function initDataProxy (vm) {
   var data = vm.$options.data()
   vm._data = data
   // proxy data on instance
@@ -27,4 +31,12 @@ function proxy(vm, key) {
       vm._data[key] = val
     }
   })
+}
+
+function initWatcher(vm) {
+  vm._watchers = []
+  observe(vm._data)
+  Vue.prototype.$watch = function watch (expOrFn, cb, options){
+    new Watcher(vm, expOrFn, cb)
+  }
 }
