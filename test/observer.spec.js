@@ -117,14 +117,14 @@ describe('Observer test', function() {
     })
 
     var cb = jasmine.createSpy('cb');
-    var watcher = new Watcher(vm, function(){
+    new Watcher(vm, function(){
       var a = vm.a
     }, cb)
     vm.a = 5;
     expect(cb).toHaveBeenCalled();
 
     var cb2 = jasmine.createSpy('cb2');
-    var watcher2 = new Watcher(vm, 'b', cb2)
+    new Watcher(vm, 'b', cb2)
     vm.b = 6
     expect(cb2).toHaveBeenCalled();
 

@@ -16,6 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       {pattern: 'test/*.spec.js', watched: true},
+      {pattern: 'test/*/*.spec.js', watched: true},
     ],
 
 
@@ -27,6 +28,7 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'test/*.spec.js': [ 'webpack' ],
+      'test/*/*.spec.js': [ 'webpack' ],
     },
 
     webpack: {
@@ -34,6 +36,7 @@ module.exports = function(config) {
       // (you don't need to specify the entry option)
       // webpack watches dependencies
       mode: 'development',
+      devtool: '#eval-source-map',
       resolve: {
       },
       module: {
@@ -46,8 +49,8 @@ module.exports = function(config) {
         ]
       },
       plugins: [
+        new FriendlyErrorsPlugin(),
       ],
-      devtool: '#inline-source-map'
       // webpack configuration
     },
 

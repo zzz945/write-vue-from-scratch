@@ -1,14 +1,6 @@
-import {
-  def,
-  hasOwn,
-  hasProto,
-  isObject
-} from '../util/index.js'
+import { def, hasOwn, hasProto, isObject } from '../util/index.js'
 import Dep from './dep.js'
-import {
-  arrayMethods,
-  arrayKeys
-} from './array.js'
+import { arrayMethods, arrayKeys } from './array.js'
 
 // Observer constructor
 export function observe (value){
@@ -70,7 +62,7 @@ export function defineReactive (obj, key, val) {
         return
       }
       val = newVal
-      childOb = observe(newVal) //new
+      childOb = observe(newVal)
       dep.notify()
     }
   })

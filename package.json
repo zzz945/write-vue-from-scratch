@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "myvue",
   "scripts": {
-    "test": "karma start"
+    "test": "karma start",
+    "build-example": "cd ./example/;webpack --config webpack.conf.js;cd .."
   },
   "author": "zhangdaiyan <zhangdaiyan@gmail.com>",
   "license": "MIT",
@@ -16,7 +17,9 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^2.0.1",
     "karma-webpack": "^3.0.5",
-    "webpack": "4.20.2"
+    "webpack": "4.20.2",
+    "webpack-cli": "3.1.2",
+    "friendly-errors-webpack-plugin": "1.6.1"
   },
   "dependencies": {},
   "engines": {

@@ -1,5 +1,7 @@
+import Vue from '../src/index.js'
+
 new Vue ({
-  el: 'root',
+  el: '#root',
   data () {
     return {
       message: 'hello world'
