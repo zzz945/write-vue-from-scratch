@@ -1,6 +1,8 @@
 // Karma configuration
 // Generated on Wed Dec 12 2018 13:21:42 GMT+0800 (GMT+08:00)
 
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+
 module.exports = function(config) {
   config.set({
 

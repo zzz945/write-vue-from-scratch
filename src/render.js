@@ -10,7 +10,6 @@ export function renderMixin (Vue) {
   Vue.prototype.__patch__ = function (prevVnode, vnode) {
     if (!prevVnode) { // 首次渲染
       const elm = createElm(vnode)
-
       if (this.$el) {
         const parent = this.$el.parentElement
         parent.insertBefore(elm, this.$el)
@@ -19,7 +18,8 @@ export function renderMixin (Vue) {
 
       return elm
     } else {
-      return patch(this.$el, prevVnode, vnode)
+      const parent = (this.$el || {}).parentElement
+      return patch(parent, prevVnode, vnode)
     }
   }
 }

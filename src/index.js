@@ -1,5 +1,5 @@
 import Watcher from './observer/watcher.js'
-import { observe } from "./observer/index.js"
+import { observe, defineReactive } from "./observer/index.js"
 import { createElement } from './vdom/create-element.js'
 import { renderMixin } from './render.js'
 import { lifecycleMixin, mountComponent } from './lifecycle.js'
@@ -10,6 +10,7 @@ export default function Vue (options) {
   vm.$options = options || {}
   initOptions(vm)
   initDataProxy(vm)
+  initProps(vm)
   initWatcher(vm)
   initRender(vm)
   initLifecycle(vm)
@@ -33,19 +34,35 @@ function initDataProxy (vm) {
 
   var i = keys.length
   while (i--) {
-    proxy(vm, keys[i])
+    proxy(vm, '_data', keys[i])
   }
 }
 
-function proxy(vm, key) {
+function initProps (vm) {
+  const propsOptions = vm.$options.props
+  if (!propsOptions || !propsOptions.length) return
+
+  const propsData = vm.$options.propsData
+  vm._props = {}
+  propsOptions.forEach(key => {
+    const value = propsData[key]
+    vm._props[key] = value
+    defineReactive(vm._props, key, value)
+    if (!(key in vm)) {
+      proxy(vm, `_props`, key)
+    }
+  })
+}
+
+function proxy(vm, name, key) {
   Object.defineProperty(vm, key, {
     configurable: true,
     enumerable: true,
     get: function proxyGetter() {
-      return vm._data[key]
+      return vm[name][key]
     },
     set: function proxySetter(val) {
-      vm._data[key] = val
+      vm[name][key] = val
     }
   })
 }

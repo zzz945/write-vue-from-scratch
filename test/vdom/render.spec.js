@@ -16,6 +16,15 @@ describe('Options render', () => {
         }
       }
     }).$mount()
+
+    expect(vm.$el.tagName).toBe('UL')
+    for (let i = 0; i < vm.$el.children.length; i++) {
+      const li = vm.$el.children[i]
+      expect(li.tagName).toBe('LI')
+      expect(li.textContent).toBe(vm.items[i].name)
+    }
+
+    vm.items = [{ id: 3, name: 'task3' }, { id: 4, name: 'task4' }]
     expect(vm.$el.tagName).toBe('UL')
     for (let i = 0; i < vm.$el.children.length; i++) {
       const li = vm.$el.children[i]

@@ -3,9 +3,6 @@ import { createComponent } from "./create-component";
 
 import {
   isDef,
-  isUndef,
-  isTrue,
-  isPrimitive,
   resolveAsset
 } from "../util/index";
 
@@ -16,20 +13,11 @@ export function createElement(
   children
 ) {
   let vnode;
-  if (typeof tag === "string") {
-    let Ctor
-    if (isDef((Ctor = resolveAsset(context.$options, "components", tag)))) {
-      // component
-      vnode = createComponent(Ctor, data, context, children, tag);
-    } else {
-      // unknown or unlisted namespaced elements
-      // check at runtime because it may get assigned a namespace when its
-      // parent normalizes children
-      vnode = new VNode(tag, data, children, undefined, undefined, context);
-    }
+  let Ctor = resolveAsset(context.$options, "components", tag)
+  if (isDef(Ctor)) {
+    vnode = createComponent(Ctor, data, context, children, tag);
   } else {
-    // direct component options / constructor
-    vnode = createComponent(tag, data, context, children);
+    vnode = new VNode(tag, data, children, undefined, undefined, context);
   }
   if (!isDef(vnode)) {
     return createEmptyVNode();

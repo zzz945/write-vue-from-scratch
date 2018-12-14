@@ -19,27 +19,27 @@ describe('create-element', () => {
     expect(vnode.context).toEqual(vm)
   })
 
-  // it('render vnode with component using createElement', () => {
-  //   const vm = new Vue({
-  //     data () {
-  //       return { msg: 'hello world' }
-  //     },
-  //     components: {
-  //       'my-component': {
-  //         props: ['msg']
-  //       }
-  //     }
-  //   })
-  //   const h = vm.$createElement
-  //   const vnode = h('my-component', { props: { msg: vm.message }})
-  //   expect(vnode.tag).toMatch(/vue-component-[0-9]+/)
-  //   expect(vnode.componentOptions.propsData).toEqual({ msg: vm.message })
-  //   expect(vnode.children).toBeUndefined()
-  //   expect(vnode.text).toBeUndefined()
-  //   expect(vnode.elm).toBeUndefined()
-  //   expect(vnode.ns).toBeUndefined()
-  //   expect(vnode.context).toEqual(vm)
-  // })
+  it('render vnode with component using createElement', () => {
+    const vm = new Vue({
+      data () {
+        return { msg: 'hello world' }
+      },
+      components: {
+        'my-component': {
+          props: ['msg'],
+        }
+      }
+    })
+    const h = vm.$createElement
+    const vnode = h('my-component', { props: { msg: vm.msg }})
+    // expect(vnode.tag).toMatch(/vue-component-[0-9]+/)
+    expect(vnode.componentOptions.propsData).toEqual({ msg: vm.msg })
+    expect(vnode.children).toBeUndefined()
+    expect(vnode.text).toBeUndefined()
+    expect(vnode.elm).toBeUndefined()
+    expect(vnode.ns).toBeUndefined()
+    expect(vnode.context).toEqual(vm)
+  })
 
   it('render vnode with custom tag using createElement', () => {
     const vm = new Vue({
@@ -58,16 +58,5 @@ describe('create-element', () => {
     expect(vnode.ns).toBeUndefined()
     expect(vnode.context).toEqual(vm)
     expect(vnode.componentOptions).toBeUndefined()
-  })
-
-  it('render empty vnode with falsy tag using createElement', () => {
-    const vm = new Vue({
-      data () {
-        return { msg: 'hello world' }
-      }
-    })
-    const h = vm.$createElement
-    const vnode = h(null, {})
-    expect(vnode).toEqual(createEmptyVNode())
   })
 })

@@ -1,4 +1,5 @@
 import VNode, { createTextVNode } from './vnode'
+import Vue from '../index'
 
 import {
   isDef,
@@ -89,13 +90,21 @@ export function patch(parent, oldVnode, vnode) {
   // // 否则，直接把 oldVnode 替换为 vnode。
   // else {
     const elm = createElm(vnode)
-    parent.insertBefore(elm, oldVnode.elm)
-    parent.removeChild(oldVnode.elm)
+    if (parent) {
+      parent.insertBefore(elm, oldVnode.elm)
+      parent.removeChild(oldVnode.elm)
+    }
     return elm
   // }
 }
 
 export function createElm (vnode) {
+  if (vnode.componentOptions/* && !vnode.componentInstance*/) {
+    const componentInstance = new Vue(Object.assign({}, vnode.componentOptions.Ctor, { propsData: vnode.componentOptions.propsData })).$mount()
+    vnode.componentInstance = componentInstance
+    return componentInstance.$el
+  }
+
   const el = document.createElement(vnode.tag)
   for (let key in vnode.data) {
     el.setAttribute(key, vnode.data[key]);
@@ -105,17 +114,17 @@ export function createElm (vnode) {
   }
 
   const children = vnode.children
-  if (children) {
-    if (typeof children === 'string') {
-      el.textContent = children
-    } else {
+  if (isDef(children)) {
+    if (Array.isArray(children)) {
       vnode.children.forEach(child => {
-        if (typeof child === 'string') {
-          el.textContent = child
-        } else {
+        if (typeof child === 'object') {
           el.appendChild(createElm(child))
+        } else {
+          el.textContent = child
         }
       });
+    } else {
+      el.textContent = children
     }
   }
   return el
