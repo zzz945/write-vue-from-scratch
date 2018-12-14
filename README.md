@@ -8,6 +8,10 @@
 > https://github.com/zzz945/write-vue-from-scratch/commit/db41c82f43030f8dc4344447f5ddf78e7106a6ef
 4. component vnode render
 > https://github.com/zzz945/write-vue-from-scratch/commit/c59763231132402c7bf53433d46fabb985b5e226
+5. handle dom event
+> https://github.com/zzz945/write-vue-from-scratch/commit/a127da056fa9e2ae0ad3b2e6e5741c58d15f0a7b
+6. handle component action
+7. patch
 ## Test
 ```sh
 npm run test
