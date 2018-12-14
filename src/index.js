@@ -14,6 +14,8 @@ export default function Vue (options) {
   initWatcher(vm)
   initRender(vm)
   initLifecycle(vm)
+  initMethods(vm)
+  initEvents(vm)
   if (vm.$options.el) {
     vm.$mount(vm.$options.el)
   }
@@ -86,4 +88,15 @@ function initLifecycle(vm) {
     this.$el = el ? query(el) : undefined
     return mountComponent(this, el)
   }
+}
+
+function initMethods (vm) {
+  const methods = vm.$options.methods || {}
+  for (const key in methods) {
+    vm[key] = methods[key].bind(vm)
+  }
+}
+
+function initEvents (vm) {
+  vm._events = []
 }

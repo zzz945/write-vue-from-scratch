@@ -132,3 +132,7 @@ export function query (el) {
 }
 
 export function noop (a, b, c) {}
+
+export function remove (arr, item) {
+  arr.splice(arr.findIndex(v => v === item), 1);
+}

@@ -1,4 +1,5 @@
 import { patch, createElm } from './vdom/patch'
+import Dep from './observer/dep'
 
 export function renderMixin (Vue) {
   Vue.prototype._render = function () {

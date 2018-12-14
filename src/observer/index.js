@@ -54,6 +54,7 @@ export function defineReactive (obj, key, val) {
           childOb.dep.depend()
         }
       }
+
       return value
     },
     set: function reactiveSetter (newVal) {

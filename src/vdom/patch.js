@@ -105,10 +105,22 @@ export function createElm (vnode) {
     return componentInstance.$el
   }
 
+  // create element
   const el = document.createElement(vnode.tag)
-  for (let key in vnode.data) {
-    el.setAttribute(key, vnode.data[key]);
+
+  // set attrs
+  const attrs = (vnode.data || {}).attrs || {}
+  for (let key in attrs) {
+    el.setAttribute(key, attrs[key]);
   }
+
+  // set dom eventlistener
+  const events = (vnode.data || {}).on || {}
+  for (let key in events) {
+    // forget remove?
+    el.addEventListener(key, events[key])
+  }
+
   if (vnode.text) {
     el.textContent = vnode.text
   }

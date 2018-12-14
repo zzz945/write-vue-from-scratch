@@ -1,5 +1,5 @@
 import Dep from './dep.js'
-import { get as _get } from '../util/index.js'
+import { get as _get, remove } from '../util/index.js'
 
 let uid = 0
 
@@ -9,8 +9,8 @@ export default function Watcher(vm, expOrFn, cb, options) {
   vm._watchers.push(this)
   this.cb = cb
   this.id = ++uid
-
-  // options
+  this.active = true
+  this.depIds = new Set()
   this.deps = []
   if (typeof expOrFn === 'string') {
     this.getter = function getter () {
@@ -35,8 +35,11 @@ Watcher.prototype.update = function() {
 }
 
 Watcher.prototype.addDep = function(dep) {
-  this.deps.push(dep)
-  dep.addSub(this)
+  if (!this.depIds.has(dep.id)) {
+    this.depIds.add(dep.id)
+    this.deps.push(dep)
+    dep.addSub(this)
+  }
 }
 
 Watcher.prototype.run = function() {
@@ -44,4 +47,20 @@ Watcher.prototype.run = function() {
   var oldValue = this.value
   this.value = value
   this.cb.call(this.vm, value, oldValue)
+}
+
+  /**
+   * Remove self from all dependencies' subscriber list.
+   */
+Watcher.prototype.teardown = function() {
+  console('teardown')
+  if (this.active) {
+    // remove self from vm's watcher list
+    remove(this.vm._watchers, this)
+    let i = this.deps.length
+    while (i--) {
+      this.deps[i].removeSub(this)
+    }
+    this.active = false
+  }
 }

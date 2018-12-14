@@ -1,3 +1,5 @@
+import { remove } from '../util/index'
+
 var  uid = 0
 
 // Dep contructor
@@ -28,7 +30,3 @@ Dep.prototype.notify = function() {
 }
 
 Dep.target = null
-
-function remove (arr, item) {
-  arr.splice(arr.findIndex(v => v === item), 1);
-}
