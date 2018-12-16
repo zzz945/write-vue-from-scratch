@@ -136,3 +136,16 @@ export function noop (a, b, c) {}
 export function remove (arr, item) {
   arr.splice(arr.findIndex(v => v === item), 1);
 }
+
+/**
+ * Convert an Array-like object to a real Array.
+ */
+export function toArray (list, start) {
+  start = start || 0
+  let i = list.length - start
+  const ret = new Array(i)
+  while (i--) {
+    ret[i] = list[i + start]
+  }
+  return ret
+}

@@ -100,9 +100,10 @@ export function patch(parent, oldVnode, vnode) {
 
 export function createElm (vnode) {
   if (vnode.componentOptions/* && !vnode.componentInstance*/) {
-    const componentInstance = new Vue(Object.assign({}, vnode.componentOptions.Ctor, { propsData: vnode.componentOptions.propsData })).$mount()
-    vnode.componentInstance = componentInstance
-    return componentInstance.$el
+    const vm = new Vue(Object.assign({}, vnode.componentOptions.Ctor, { propsData: vnode.componentOptions.propsData })).$mount()
+    vm._events = vnode.componentOptions.listeners || {}
+    vnode.componentInstance = vm
+    return vm.$el
   }
 
   // create element

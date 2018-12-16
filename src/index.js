@@ -3,8 +3,7 @@ import { observe, defineReactive } from "./observer/index.js"
 import { createElement } from './vdom/create-element.js'
 import { renderMixin } from './render.js'
 import { lifecycleMixin, mountComponent } from './lifecycle.js'
-import { query } from './util/index.js'
-import { noop } from './util/index'
+import { query, noop, toArray } from './util/index.js'
 import Dep from './observer/dep'
 
 export default function Vue (options) {
@@ -103,6 +102,13 @@ function initMethods (vm) {
 
 function initEvents (vm) {
   vm._events = []
+  Vue.prototype.$emit = function (event) {
+    const vm = this
+    let cb = vm._events[event]
+    const args = toArray(arguments, 1)
+    cb.apply(vm, args)
+    return vm
+  }
 }
 
 function initComputed (vm) {
