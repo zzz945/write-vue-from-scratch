@@ -32,7 +32,7 @@ function initOptions (vm) {
 function initDataProxy (vm) {
   if (!vm.$options.data) return
 
-  var data = vm.$options.data()
+  var data = vm.$options.data.call(vm)
   vm._data = data
   // proxy data on instance
   var keys = Object.keys(data)
