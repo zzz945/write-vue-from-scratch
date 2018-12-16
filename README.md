@@ -16,7 +16,8 @@
 > https://github.com/zzz945/write-vue-from-scratch/commit/5a3a270e55dec21737b894bd4aaf3603fac50327
 8. component event/action
 > https://github.com/zzz945/write-vue-from-scratch/commit/b3669fc495767528eb5264766cea9b316e78a515
-9. patch
+9. watcher schedule
+10. patch
 ## Test
 ```sh
 npm run test
