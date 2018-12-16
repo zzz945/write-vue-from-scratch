@@ -19,6 +19,7 @@ export default function Vue (options) {
   initMethods(vm)
   initEvents(vm)
   initComputed(vm)
+  initWatch(vm)
   if (vm.$options.el) {
     vm.$mount(vm.$options.el)
   }
@@ -75,7 +76,7 @@ function proxy(vm, name, key) {
 function initWatcher(vm) {
   vm._watchers = []
   observe(vm._data)
-  Vue.prototype.$watch = function watch (expOrFn, cb, options){
+  Vue.prototype.$watch = function watch (expOrFn, cb){
     new Watcher(vm, expOrFn, cb)
   }
 }
@@ -141,4 +142,16 @@ function createComputedGetter (key) {
       return watcher.value
     }
   }
+}
+
+function initWatch (vm) {
+  const watch = vm.$options.watch || {}
+  for (const key in watch) {
+    const handler = watch[key]
+    createWatcher(vm, key, handler)
+  }
+}
+
+function createWatcher (vm, keyOrFn, handler) {
+  return vm.$watch(keyOrFn, handler)
 }
