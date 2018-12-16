@@ -4,6 +4,8 @@ import { createElement } from './vdom/create-element.js'
 import { renderMixin } from './render.js'
 import { lifecycleMixin, mountComponent } from './lifecycle.js'
 import { query } from './util/index.js'
+import { noop } from './util/index'
+import Dep from './observer/dep'
 
 export default function Vue (options) {
   var vm = this
@@ -16,6 +18,7 @@ export default function Vue (options) {
   initLifecycle(vm)
   initMethods(vm)
   initEvents(vm)
+  initComputed(vm)
   if (vm.$options.el) {
     vm.$mount(vm.$options.el)
   }
@@ -99,4 +102,43 @@ function initMethods (vm) {
 
 function initEvents (vm) {
   vm._events = []
+}
+
+function initComputed (vm) {
+  const computed = vm.$options.computed || {}
+  const watchers = vm._computedWatchers = Object.create(null)
+
+  for (const key in computed) {
+    const getter = computed[key]
+
+    // create internal watcher for the computed property.
+    watchers[key] = new Watcher(vm, getter, noop)
+
+    if (!(key in vm)) {
+      defineComputed(vm, key)
+    }
+  }
+}
+
+export function defineComputed (target, key) {
+  Object.defineProperty(target, key, {
+    enumerable: true,
+    configurable: true,
+    get: createComputedGetter(key),
+    set: noop
+  })
+}
+
+function createComputedGetter (key) {
+  return function computedGetter () {
+    const watcher = this._computedWatchers && this._computedWatchers[key]
+    if (watcher) {
+      if (Dep.target) {
+        // computed watcher观察此computed属性依赖的data和props，
+        // 这里将computed watcher的deps全部添加到Dep.target，使data和props变化能触发Dep.target的update
+        watcher.depend()
+      }
+      return watcher.value
+    }
+  }
 }

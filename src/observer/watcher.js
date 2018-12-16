@@ -3,8 +3,12 @@ import { get as _get, remove } from '../util/index.js'
 
 let uid = 0
 
-export default function Watcher(vm, expOrFn, cb, options) {
-  options = options ? options : {}
+/**
+ * A watcher parses an expression, collects dependencies,
+ * and fires callback when the expression value changes.
+ * This is used for both the $watch() api and directives.
+ */
+export default function Watcher(vm, expOrFn, cb) {
   this.vm = vm
   vm._watchers.push(this)
   this.cb = cb
@@ -22,6 +26,9 @@ export default function Watcher(vm, expOrFn, cb, options) {
   this.value = this.get()
 }
 
+/**
+ * Evaluate the getter, and re-collect dependencies.
+ */
 Watcher.prototype.get = function() {
   Dep.target = this
   var value = this.getter()
@@ -29,6 +36,10 @@ Watcher.prototype.get = function() {
   return value
 }
 
+/**
+ * Subscriber interface.
+ * Will be called when a dependency changes.
+ */
 Watcher.prototype.update = function() {
   console.log("update!!")
   this.run()
@@ -39,6 +50,16 @@ Watcher.prototype.addDep = function(dep) {
     this.depIds.add(dep.id)
     this.deps.push(dep)
     dep.addSub(this)
+  }
+},
+
+/**
+ * Depend on all deps collected by this watcher.
+ */
+Watcher.prototype.depend = function() {
+  let i = this.deps.length
+  while (i--) {
+    this.deps[i].depend()
   }
 }
 

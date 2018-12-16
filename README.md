@@ -10,8 +10,10 @@
 > https://github.com/zzz945/write-vue-from-scratch/commit/c59763231132402c7bf53433d46fabb985b5e226
 5. handle dom event
 > https://github.com/zzz945/write-vue-from-scratch/commit/a127da056fa9e2ae0ad3b2e6e5741c58d15f0a7b
-6. handle component action
-7. patch
+6. computed:
+> https://github.com/zzz945/write-vue-from-scratch/commit/451d6a1d65bf57594e06321d95058f8ed8a36b37
+7. handle component action
+8. patch
 ## Test
 ```sh
 npm run test
