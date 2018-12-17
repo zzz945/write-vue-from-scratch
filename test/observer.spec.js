@@ -103,7 +103,7 @@ describe('Observer test', function() {
     })
   });
 
-  it('should call callback when simple data change', function() {
+  it('should call callback when simple data change', function(done) {
     var vm = new Vue({
       data () {
         return {
@@ -121,17 +121,21 @@ describe('Observer test', function() {
       var a = vm.a
     }, cb)
     vm.a = 5;
-    expect(cb).toHaveBeenCalled();
 
     var cb2 = jasmine.createSpy('cb2');
     new Watcher(vm, 'b', cb2)
     vm.b = 6
-    expect(cb2).toHaveBeenCalled();
 
     var cb3 = jasmine.createSpy('cb3');
     vm.$watch('c.d', cb3)
     vm.c.d = 7
-    expect(cb3).toHaveBeenCalled();
+
+    setTimeout(_ => {
+      expect(cb).toHaveBeenCalled()
+      expect(cb2).toHaveBeenCalled()
+      expect(cb3).toHaveBeenCalled()
+      done()
+    }, 0)
   });
 })
 

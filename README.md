@@ -16,7 +16,8 @@
 > https://github.com/zzz945/write-vue-from-scratch/commit/5a3a270e55dec21737b894bd4aaf3603fac50327
 8. component event/action
 > https://github.com/zzz945/write-vue-from-scratch/commit/b3669fc495767528eb5264766cea9b316e78a515
-9. watcher schedule
+9. watcher scheduler
+> https://github.com/zzz945/write-vue-from-scratch/commit/665a2d7d541a46029c85fb6a597539ef4af673c5
 10. patch
 ## Test
 ```sh

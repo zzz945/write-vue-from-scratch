@@ -1,19 +1,27 @@
-import Dep from './dep.js'
+import Dep, { popTarget, pushTarget } from './dep.js'
 import { get as _get, remove } from '../util/index.js'
+import { queueWatcher } from './scheduler'
 
 let uid = 0
-
 /**
  * A watcher parses an expression, collects dependencies,
  * and fires callback when the expression value changes.
  * This is used for both the $watch() api and directives.
  */
-export default function Watcher(vm, expOrFn, cb) {
+export default function Watcher(vm, expOrFn, cb, options) {
   this.vm = vm
   vm._watchers.push(this)
+  // options
+  if (options) {
+    this.lazy = !!options.lazy
+    this.sync = !!options.sync
+  } else {
+    this.lazy = this.sync = false
+  }
   this.cb = cb
   this.id = ++uid
   this.active = true
+  this.dirty = this.lazy // for lazy watchers
   this.depIds = new Set()
   this.deps = []
   if (typeof expOrFn === 'string') {
@@ -23,16 +31,18 @@ export default function Watcher(vm, expOrFn, cb) {
   } else {
     this.getter = expOrFn.bind(vm)
   }
-  this.value = this.get()
+  this.value = this.lazy
+    ? undefined
+    : this.get()
 }
 
 /**
  * Evaluate the getter, and re-collect dependencies.
  */
 Watcher.prototype.get = function() {
-  Dep.target = this
+  pushTarget(this)
   var value = this.getter()
-  Dep.target = null
+  popTarget()
   return value
 }
 
@@ -41,8 +51,14 @@ Watcher.prototype.get = function() {
  * Will be called when a dependency changes.
  */
 Watcher.prototype.update = function() {
-  console.log("update!!")
-  this.run()
+  /* istanbul ignore else */
+  if (this.lazy) {
+    this.dirty = true
+  } else if (this.sync) {
+    this.run()
+  } else {
+    queueWatcher(this)
+  }
 }
 
 Watcher.prototype.addDep = function(dep) {
@@ -74,7 +90,6 @@ Watcher.prototype.run = function() {
    * Remove self from all dependencies' subscriber list.
    */
 Watcher.prototype.teardown = function() {
-  console('teardown')
   if (this.active) {
     // remove self from vm's watcher list
     remove(this.vm._watchers, this)
@@ -84,4 +99,13 @@ Watcher.prototype.teardown = function() {
     }
     this.active = false
   }
+}
+
+/**
+ * Evaluate the value of the watcher.
+ * This only gets called for lazy watchers.
+ */
+Watcher.prototype.evaluate = function() {
+  this.value = this.get()
+  this.dirty = false
 }

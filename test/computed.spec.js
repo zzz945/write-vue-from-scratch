@@ -1,7 +1,7 @@
 import Vue from "../src/index.js";
 
 describe('Computed test', function() {
-  it('Basic', function() {
+  it('Basic', function(done) {
   	var vm = new Vue({
   		data () {
         return {
@@ -26,6 +26,10 @@ describe('Computed test', function() {
     vm.a = 5
     expect(vm.b).toEqual(6)
     expect(vm.c).toEqual(7)
-    expect(vm.$el.textContent).toEqual('7')
+    setTimeout(_ => {
+
+      expect(vm.$el.textContent).toEqual('7')
+      done()
+    }, 10)
   });
 });

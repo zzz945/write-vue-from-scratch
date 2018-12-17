@@ -119,7 +119,7 @@ function initComputed (vm) {
     const getter = computed[key]
 
     // create internal watcher for the computed property.
-    watchers[key] = new Watcher(vm, getter, noop)
+    watchers[key] = new Watcher(vm, getter, noop, { lazy: true })
 
     if (!(key in vm)) {
       defineComputed(vm, key)
@@ -140,6 +140,9 @@ function createComputedGetter (key) {
   return function computedGetter () {
     const watcher = this._computedWatchers && this._computedWatchers[key]
     if (watcher) {
+      if (watcher.dirty) {
+        watcher.evaluate()
+      }
       if (Dep.target) {
         // computed watcher观察此computed属性依赖的data和props，
         // 这里将computed watcher的deps全部添加到Dep.target，使data和props变化能触发Dep.target的update

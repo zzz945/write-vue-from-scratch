@@ -20,7 +20,8 @@ export function renderMixin (Vue) {
       return elm
     } else {
       const parent = (this.$el || {}).parentElement
-      return patch(parent, prevVnode, vnode)
+      const elm = patch(parent, prevVnode, vnode)
+      return elm
     }
   }
 }

@@ -1,7 +1,7 @@
 import Vue from "../../src/index.js"
 
 describe('create-component', () => {
-  it('render vnode with component', () => {
+  it('render vnode with component', (done) => {
     const vm = new Vue({
       data () {
         return { msg1: 'hello', msg2: 'world' }
@@ -30,7 +30,10 @@ describe('create-component', () => {
     expect(el.children[1].textContent).toEqual('world')
 
     vm.msg1 = 'fuck'
-    el = vm.$el
-    expect(el.children[0].textContent).toEqual('fuck')
+    setTimeout(_ => {
+      el = vm.$el
+      expect(el.children[0].textContent).toEqual('fuck')
+      done()
+    }, 0)
   })
 })

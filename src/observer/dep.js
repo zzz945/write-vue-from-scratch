@@ -33,3 +33,15 @@ Dep.prototype.notify = function() {
 // this is globally unique because there could be only one
 // watcher being evaluated at any time.
 Dep.target = null
+
+// fix computed depending on computed
+const targetStack = []
+
+export function pushTarget (_target) {
+  if (Dep.target) targetStack.push(Dep.target)
+  Dep.target = _target
+}
+
+export function popTarget () {
+  Dep.target = targetStack.pop()
+}

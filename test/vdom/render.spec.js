@@ -1,7 +1,7 @@
 import Vue from "../../src/index.js"
 
 describe('Options render', () => {
-  it('basic usage', () => {
+  it('basic usage', (done) => {
     const vm = new Vue({
       render (h) {
         const children = []
@@ -25,12 +25,15 @@ describe('Options render', () => {
     }
 
     vm.items = [{ id: 3, name: 'task3' }, { id: 4, name: 'task4' }]
-    expect(vm.$el.tagName).toBe('UL')
-    for (let i = 0; i < vm.$el.children.length; i++) {
-      const li = vm.$el.children[i]
-      expect(li.tagName).toBe('LI')
-      expect(li.textContent).toBe(vm.items[i].name)
-    }
+    setTimeout(_ => {
+      expect(vm.$el.tagName).toBe('UL')
+      for (let i = 0; i < vm.$el.children.length; i++) {
+        const li = vm.$el.children[i]
+        expect(li.tagName).toBe('LI')
+        expect(li.textContent).toBe(vm.items[i].name)
+      }
+      done()
+    }, 0)
   })
 
   it('allow null data', () => {
